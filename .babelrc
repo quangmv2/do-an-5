@@ -1,0 +1,43 @@
+{
+  "presets": [
+    "module:metro-react-native-babel-preset"
+  ],
+  "env": {
+    "production": {
+    }
+  },
+  "plugins": [
+    [
+      "@babel/plugin-proposal-decorators",
+      {
+        "legacy": true
+      }
+    ],
+    [
+      "babel-plugin-inline-import",
+      {
+        "extensions": [".svg"]
+      }
+    ],
+    [
+      "module-resolver",
+      {
+        "alias": {
+          "@assets": "./src/assets",
+          "@images": "./src/assets/img",
+          "@icons": "./src/assets/icons",
+          "@components": "./src/components",
+          "@config": "./src/config",
+          "@constants": "./src/constants",
+          "@database": "./src/database",
+          "@routers": "./src/routers",
+          "@screens": "./src/screens",
+          "@store": "./src/store",
+          "@style": "./src/style",
+          "@utils": "./src/utils"
+        }
+      }
+    ],
+    "@babel/plugin-proposal-optional-chaining"
+  ]
+}
