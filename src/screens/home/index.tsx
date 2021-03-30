@@ -8,6 +8,7 @@ import { Screens } from "@routers";
 import { useStore, UserState } from "@store";
 import { toJS } from "mobx";
 import { observer } from "mobx-react";
+import { SearchInput } from "@components";
 
 type Props = {
 }
@@ -50,7 +51,13 @@ const Home: FunctionComponent = observer(props => {
                     Home
                 </Text>
             </Button>
-
+            <SearchInput 
+                style={{
+                    marginHorizontal: 15,
+                    borderRadius: 15,
+                    marginTop: 20
+                }}
+            />
         </SafeAreaView>
     )
 })
