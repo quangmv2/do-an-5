@@ -3,13 +3,16 @@ import React, { FunctionComponent, memo } from "react";
 import { Navigation } from "@routers";
 import { Provider } from "mobx-react";
 import { stores } from "@store";
+import { TabBarProvider } from "../../store/tabBar";
 
 const App: FunctionComponent = props => {
     return (
         <Root>
-            <Provider stores={stores}>
-                <Navigation />
-            </Provider>
+            <TabBarProvider>
+                <Provider stores={stores}>
+                    <Navigation />
+                </Provider>
+            </TabBarProvider>
         </Root>
     )
 }

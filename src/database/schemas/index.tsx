@@ -1,11 +1,10 @@
 import Realm from 'realm'
-import Huyen from './Huyen';
-import TinhThanh from './TinhThanh';
+import Image from './Image';
 
 
 const realm = new Realm({
-    schema: [Huyen, TinhThanh]
+    schema: [Image]
   });
 
-export { realm, Huyen, TinhThanh }
+export { realm, Image }
 

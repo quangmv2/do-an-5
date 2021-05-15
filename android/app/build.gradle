@@ -135,6 +135,7 @@ android {
         versionCode 1
         versionName "1.0"
     }
+
     splits {
         abi {
             reset()
@@ -149,6 +150,13 @@ android {
             storePassword 'android'
             keyAlias 'androiddebugkey'
             keyPassword 'android'
+        }
+    }
+    sourceSets {
+        main {
+            jni {
+                srcDirs 'src/main/jni', 'src/main/jniLibs'
+            }
         }
     }
     buildTypes {
@@ -186,6 +194,10 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    implementation project(path: ':openCVLibrary3414')
+    implementation 'androidx.appcompat:appcompat:1.2.0'
+    implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.constraintlayout:constraintlayout:2.0.1'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
       exclude group:'com.facebook.fbjni'
