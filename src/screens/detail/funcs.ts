@@ -1,34 +1,44 @@
 export const funcs = [
     {
         name: 'Độ sáng',
-        icon: ''
+        icon: 'light-up',
+        typeIcon: 'Entypo',
+        propName: '',
+        type: "slider",
     },
     {
         name: 'Độ tương phản',
-        icon: ''
+        propName: '',
+        typeIcon: 'Ionicons',
+        icon: 'color-filter',
+        type: "slider",
     },
     {
         name: 'Độ nét',
-        icon: ''
+        propName: '',
+        typeIcon: 'MaterialCommunityIcons',
+        icon: 'chart-histogram',
+        type: "slider",
     },
     {
         name: 'Căn bằng trắng',
-        icon: ''
+        propName: '',
+        typeIcon: 'Fontisto',
+        icon: 'equalizer',
+        type: "slider",
     },
     {
-        name: 'Độ sáng',
-        icon: ''
+        name: 'Làm mờ',
+        propName: 'blur',
+        typeIcon: 'MaterialCommunityIcons',
+        icon: 'blur',
+        type: "slider",
     },
     {
         name: 'Độ tương phản',
-        icon: ''
-    },
-    {
-        name: 'Độ nét',
-        icon: ''
-    },
-    {
-        name: 'Căn bằng trắng',
-        icon: ''
+        propName: '',
+        typeIcon: 'Entypo',
+        icon: 'light-up',
+        type: "slider",
     }
 ]

@@ -1,10 +1,16 @@
-import { Text } from 'native-base';
+import { COLOR } from '@style';
+import { Icon, Text } from 'native-base';
 import React, { forwardRef, memo, useImperativeHandle, useState } from 'react';
 import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 interface FuncItemProps {
     name?: string
-    onPress?: (value?: number) => void
+    onPress?: (index: number,  propName: string, value?: number) => void
+    index: number
+    propName: string,
+    active?: boolean,
+    icon: string
+    typeIcon?: any
 }
 
 export interface RefFuncItem {
@@ -13,7 +19,12 @@ export interface RefFuncItem {
 
 const FuncItem= memo(forwardRef<RefFuncItem, FuncItemProps>(({
     name,
-    onPress
+    onPress,
+    index,
+    propName,
+    active,
+    typeIcon,
+    icon
 }, ref) => {
 
     const [state, setState] = useState<number>(0);
@@ -22,9 +33,13 @@ const FuncItem= memo(forwardRef<RefFuncItem, FuncItemProps>(({
         setState
     }))
 
+    console.log(index, state);
+    
+
     return (
-        <TouchableOpacity style={styles.container} onPress={() => onPress && onPress(state)}>
-            <Text>{name}</Text>
+        <TouchableOpacity style={styles.container} onPress={() => onPress && onPress(index, propName, state)}>
+            <Icon style={[active && styles.active]} name={icon} type={typeIcon} />
+            <Text  style={[active && styles.active]}>{name}</Text>
         </TouchableOpacity>
     );
 }))
@@ -36,11 +51,14 @@ export {
 const styles = StyleSheet.create({
     container: {
         height: 60,
-        backgroundColor: 'red',
         paddingHorizontal: 5,
-        justifyContent: 'center'
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     text: {
 
+    },
+    active: {
+        color: COLOR.COLOR_PRIMARY
     }
 })
