@@ -3,7 +3,8 @@ import { StyleProp, ViewStyle } from "react-native";
 export interface IState {
     source?: string
     autoHistogram?: boolean
-    blur?: number
+    blur?: number,
+    stateSlider?: number
 }
 
 export interface PropsCvViewer {

@@ -11,7 +11,9 @@ import androidx.annotation.RequiresApi;
 
 import com.bsxapp.R;
 import com.bsxapp.nativeModules.openCV.util.EnumHistory;
+import com.bsxapp.nativeModules.openCV.util.EnumMatType;
 import com.bsxapp.nativeModules.openCV.util.History;
+import com.bsxapp.nativeModules.openCV.util.MatType;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.uimanager.SimpleViewManager;
@@ -31,7 +33,9 @@ import java.io.File;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class CVViewer extends SimpleViewManager<ImageView> {
 
@@ -49,15 +53,17 @@ public class CVViewer extends SimpleViewManager<ImageView> {
 
     private ImageView imageView;
     private Mat imageMat;
-    ate Mat currentMat;
     private List<History> historiesMat;
+    private Map<EnumMatType, Mat> matrixs;
 
     public CVViewer(ReactApplicationContext reactContext) {
         this.reactContext = reactContext;
         historiesMat = new ArrayList<>();
 //        this.imageMat = new Mat();
-        this.currentMat = new Mat();
         imageView = new ImageView(this.reactContext);
+        matrixs = new HashMap<>();
+        matrixs.put(EnumMatType.AUTO_HISTORY, new Mat());
+        matrixs.put(EnumMatType.BLUR, new Mat());
     }
 
     @Override
@@ -86,7 +92,7 @@ public class CVViewer extends SimpleViewManager<ImageView> {
                 this.historiesMat.clear();
                 Imgproc.cvtColor(matrix, matrix, Imgproc.COLOR_BGR2RGB);
                 setImageFromMath(matrix);
-                System.out.println(2);
+                this.matrixs.forEach((key, mat) -> matrixs.put(key, matrix));
             } catch (Exception e) {
                 Log.e(TAG, "err path");
             }
@@ -104,7 +110,7 @@ public class CVViewer extends SimpleViewManager<ImageView> {
             Mat dst = new Mat();
             Imgproc.GaussianBlur(this.imageMat, dst, new Size(20, 20), value);
             setImageFromMath(dst);
-           System.out.println(value);
+
         });
         task.start();
     }
@@ -113,7 +119,7 @@ public class CVViewer extends SimpleViewManager<ImageView> {
     public void setHitogram(ImageView view, boolean value) {
         System.out.println(value);
         if (imageMat == null) return;
-//        try {
+        try {
             if (value != true) {
                 this.historiesMat.add(new History(EnumHistory.AUTO_HISTORY, -1));
                 setImageFromMath(this.imageMat);
@@ -129,10 +135,9 @@ public class CVViewer extends SimpleViewManager<ImageView> {
 //            this.historiesMat.add(new History(EnumHistory.AUTO_HISTORY, 1));
 //            this.currentMat = cvtHist;
             setImageFromMath(cvtHist);
-//        }catch (Exception e) {
-//            Log.e(TAG, "err autoHistogram");
-//        }
-
+        }catch (Exception e) {
+            Log.e(TAG, "err autoHistogram");
+        }
     }
 
     private void setImageFromMath(Mat matrix) {
@@ -140,15 +145,4 @@ public class CVViewer extends SimpleViewManager<ImageView> {
         Utils.matToBitmap(matrix, bitmap);
         this.imageView.setImageBitmap(bitmap);
     }
-
-//    Mat convertBitMap2Mat (Bitmap rgbaImage){
-//        Mat rgbaMat = new Mat(rgbaImage.getHeight(), rgbaImage.getWidth(),CvType.CV_8UC4);
-//        Bitmap bmp32 = rgbaImage.copy(Bitmap.Config.ARGB_8888, true);
-//        Utils.bitmapToMat(bmp32, rgbaMat);
-//
-//        Mat rgbMat = new Mat(rgbaImage.getHeight(), rgbaImage.getWidth(), CvType.CV_8UC3);
-//        cvtColor(rgbaMat,rgbMat,Imgproc.COLOR_RGBA2BGR, 3);
-//        return rgbMat;
-//    }
-
 }

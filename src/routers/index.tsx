@@ -38,6 +38,7 @@ const HomeStackScreen = () => {
                 gestureEnabled: true,
                 gestureDirection: "horizontal",
             }}
+            initialRouteName='Detail'
         >
             {
                 HomeStackRouter.map((router, i) => <HomeStack.Screen
@@ -88,7 +89,10 @@ const Navigation = () => {
         <NavigationContainer>
             <Tab.Navigator
                 tabBar={props => <TabBar {...props} />}
-                
+                lazy={true}
+                screenOptions={{
+                    tabBarVisible: false
+                }}
             >
                 <Tab.Screen name="Home" component={HomeStackScreen} 
                     options={{ 

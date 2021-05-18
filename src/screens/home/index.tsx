@@ -31,7 +31,7 @@ const Home: FunctionComponent = observer(props => {
     setLoading(true)
     queriesImageEdit().then(data => {
       setImages(data)
-    }).catch(() => {}).finally(() => setLoading(false))
+    }).catch(() => { }).finally(() => setLoading(false))
   }, [])
 
   const checkPermission = () => {
@@ -51,7 +51,7 @@ const Home: FunctionComponent = observer(props => {
     })
   }
 
-  const loadImages = useCallback(async() => {
+  const loadImages = useCallback(async () => {
     launchImageLibrary({
       mediaType: 'photo'
     }, (res: ImagePickerResponse) => {
@@ -61,7 +61,7 @@ const Home: FunctionComponent = observer(props => {
         typeSource: 'uri'
       }).then((data) => {
         loadImageEdited()
-      }).catch(() => {})
+      }).catch(() => { })
       navigation.navigate(Screens.Detail, {
         imgPath: res.uri
       })
@@ -79,7 +79,7 @@ const Home: FunctionComponent = observer(props => {
         typeSource: 'uri'
       }).then((data) => {
         loadImageEdited()
-      }).catch(() => {})
+      }).catch(() => { })
       if (!res || res.didCancel) return;
       navigation.navigate(Screens.Detail, {
         imgPath: res.uri
@@ -136,7 +136,7 @@ const Home: FunctionComponent = observer(props => {
                 </Text>
         </Button>
       </View>
-      <FlatList 
+      <FlatList
         data={images}
         renderItem={({ item, index }) => {
           return <TouchableOpacity
@@ -144,23 +144,23 @@ const Home: FunctionComponent = observer(props => {
               imgPath: item.uri
             })}
           >
-            <FastImage 
+            <FastImage
               source={{
                 uri: item.uri
               }}
               style={{ width: 100, height: 100 }}
-          />
+            />
           </TouchableOpacity>
-      }}
-      numColumns={4}
-      keyExtractor={(item) => item._id}
-      refreshControl={
-        <RefreshControl
+        }}
+        numColumns={4}
+        keyExtractor={(item) => item._id}
+        refreshControl={
+          <RefreshControl
             onRefresh={loadImageEdited}
             refreshing={loading}
-        />
-    }
-      onEndReachedThreshold={2}
+          />
+        }
+        onEndReachedThreshold={2}
       />
     </SafeAreaView>
   )

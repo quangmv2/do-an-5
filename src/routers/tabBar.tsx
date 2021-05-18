@@ -77,7 +77,8 @@ const TabBar = ({ state, navigation, descriptors }: BottomTabBarProps) => {
 };
 const styles = StyleSheet.create({
     wrapper: {
-        height: 60,
+        height: 0,
+        display: 'none',
         shadowOffset: {
             width: 0,
             height: -1,
@@ -88,8 +89,8 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         elevation: 10,
-        position: "absolute",
-        bottom: 0,
+        // position: "absolute",
+        // bottom: 0,
     },
     container: {
         flexDirection: "row",
