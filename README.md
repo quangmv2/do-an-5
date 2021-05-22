@@ -17,7 +17,7 @@ Config:
 Requirement:
 - JDK 8 or 11
 - Android Studio or XCode
-- Simulator or Device
+- Emulator or Device
 - NodeJS
 - Cmake
 - React native cli
