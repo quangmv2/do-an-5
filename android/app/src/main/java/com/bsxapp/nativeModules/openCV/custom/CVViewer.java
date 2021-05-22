@@ -100,64 +100,59 @@ public class CVViewer extends SimpleViewManager<ImageView> {
         };
         Thread thread = new Thread(loadImage);
         thread.start();
-        System.out.println(3);
     }
 
     @ReactProp(name = "nomral", defaultBoolean = false)
     public void showNomral(ImageView view, boolean value) {
-        Thread task = new Thread(() -> {
-            if (value) this.setImageFromMath(this.imageMat);
-            else this.processImage();
-        });
-        task.start();
+        if (value) {
+            Thread task = new Thread(() -> {
+                this.setImageFromMath(this.imageMat);
+            });
+            task.start();
+        }
+        else this.processImage();
     }
 
     @ReactProp(name = "light", defaultInt = 0)
     public void setLight(ImageView view, Integer value) {
-        Thread task = new Thread(() -> {
-            this.light = value;
-            this.processImage();
-        });
-        task.start();
+        this.light = value;
+        this.processImage();
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @ReactProp(name = "blur", defaultInt = 0)
     public void setBlur(ImageView view, Integer value) {
         if (imageMat == null) return;
-        Thread task = new Thread(() -> {
-            this.blur = value;
-            this.processImage();
-        });
-        task.start();
+        this.blur = value;
+        this.processImage();
     }
 
     @ReactProp(name = "autoHistogram", defaultBoolean = false)
     public void setHitogram(ImageView view, boolean value) {
         System.out.println(value);
         if (imageMat == null) return;
-        Thread task = new Thread(() -> {
-           this.autoHist = value;
-           this.processImage();
-        });
-        task.start();
+        this.autoHist = value;
+        this.processImage();
     }
 
     private void processImage() {
-        Mat dst = this.imageMat.clone();
-        System.out.println(this.blur);
-        if (this.blur != 0) Imgproc.GaussianBlur(dst, dst, new Size(15, 15), this.blur);
-        if (this.autoHist) {
-            Imgproc.cvtColor(dst, dst, Imgproc.COLOR_RGB2HSV);
-            ArrayList<Mat> chanelsColor = new ArrayList<>(3);
-            Core.split(dst, chanelsColor);
-            Imgproc.equalizeHist(chanelsColor.get(2), chanelsColor.get(2));
-            Core.merge(chanelsColor, dst);
-            Imgproc.cvtColor(dst, dst, Imgproc.COLOR_HSV2RGB);
-        }
-        System.out.println(this.light);
-        dst.convertTo(dst, -1, 1, this.light);
-        this.setImageFromMath(dst);
+       Thread task = new Thread(() -> {
+           Mat dst = this.imageMat.clone();
+           System.out.println(this.blur);
+           if (this.blur != 0) Imgproc.GaussianBlur(dst, dst, new Size(15, 15), this.blur);
+           if (this.autoHist) {
+               Imgproc.cvtColor(dst, dst, Imgproc.COLOR_RGB2HSV);
+               ArrayList<Mat> chanelsColor = new ArrayList<>(3);
+               Core.split(dst, chanelsColor);
+               Imgproc.equalizeHist(chanelsColor.get(2), chanelsColor.get(2));
+               Core.merge(chanelsColor, dst);
+               Imgproc.cvtColor(dst, dst, Imgproc.COLOR_HSV2RGB);
+           }
+           System.out.println(this.light);
+           dst.convertTo(dst, -1, 1, this.light);
+           this.setImageFromMath(dst);
+       });
+       task.start();
     }
 
     private void setImageFromMath(Mat matrix) {
