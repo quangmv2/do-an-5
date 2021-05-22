@@ -5,7 +5,8 @@ const Image = {
         _id: 'string',
         uri: 'string',
         typeSource: 'string',
-        values: 'string'
+        values: 'string',
+        createdAt: 'float'
     }
 }
 

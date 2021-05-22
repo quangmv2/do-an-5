@@ -2,9 +2,10 @@ import { StyleProp, ViewStyle } from "react-native";
 
 export interface IState {
     source?: string
-    autoHistogram?: boolean
-    blur?: number,
     stateSlider?: number
+    switch?: boolean
+    type?: "slider" | "switch" | "sliderRe" | any
+    propName?: string
 }
 
 export interface PropsCvViewer {
@@ -14,7 +15,7 @@ export interface PropsCvViewer {
 }
 
 export interface RefCvViewer {
-    setNativeProps?: (values: IState) => void
+    setNativeProps?: (values: any) => void
 }
 
 export interface ParamsProps {

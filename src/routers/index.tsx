@@ -38,7 +38,7 @@ const HomeStackScreen = () => {
                 gestureEnabled: true,
                 gestureDirection: "horizontal",
             }}
-            initialRouteName='Detail'
+            // initialRouteName='Detail'
         >
             {
                 HomeStackRouter.map((router, i) => <HomeStack.Screen

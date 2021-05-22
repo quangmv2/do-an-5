@@ -7,6 +7,7 @@ const createImageEdit = (image?: ImageEdit) => new Promise((reslove, reject) => 
         if (!image?._id) image._id = uuid.v4().toString()
         console.log(image);
         image.values = ''
+        image.createdAt = Date.now()
         realm.write(() => {
             const tt: ImageEdit = realm.create('Image', image);
             console.log(tt);

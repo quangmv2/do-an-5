@@ -3,8 +3,15 @@ export const funcs = [
         name: 'Độ sáng',
         icon: 'light-up',
         typeIcon: 'Entypo',
-        propName: '',
-        type: "slider",
+        propName: 'light',
+        type: "sliderRe",
+    },
+    {
+        name: 'Cân bằng trắng',
+        icon: 'glass-whiskey',
+        typeIcon: 'FontAwesome5',
+        propName: 'autoHistogram',
+        type: "switch",
     },
     {
         name: 'Độ tương phản',
@@ -21,13 +28,6 @@ export const funcs = [
         type: "slider",
     },
     {
-        name: 'Căn bằng trắng',
-        propName: '',
-        typeIcon: 'Fontisto',
-        icon: 'equalizer',
-        type: "slider",
-    },
-    {
         name: 'Làm mờ',
         propName: 'blur',
         typeIcon: 'MaterialCommunityIcons',
@@ -35,10 +35,10 @@ export const funcs = [
         type: "slider",
     },
     {
-        name: 'Độ tương phản',
+        name: 'Mờ viền',
         propName: '',
-        typeIcon: 'Entypo',
-        icon: 'light-up',
+        typeIcon: 'FontAwesome',
+        icon: 'square-o',
         type: "slider",
     }
 ]

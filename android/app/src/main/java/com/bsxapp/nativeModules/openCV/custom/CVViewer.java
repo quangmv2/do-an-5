@@ -53,17 +53,20 @@ public class CVViewer extends SimpleViewManager<ImageView> {
 
     private ImageView imageView;
     private Mat imageMat;
-    private List<History> historiesMat;
-    private Map<EnumMatType, Mat> matrixs;
+    private Integer blur = 0;
+    private Integer light = 0;
+    private boolean autoHist = false;
+//    private List<History> historiesMat;
+//    private Map<EnumMatType, Mat> matrixs;
 
     public CVViewer(ReactApplicationContext reactContext) {
         this.reactContext = reactContext;
-        historiesMat = new ArrayList<>();
+//        historiesMat = new ArrayList<>();
 //        this.imageMat = new Mat();
         imageView = new ImageView(this.reactContext);
-        matrixs = new HashMap<>();
-        matrixs.put(EnumMatType.AUTO_HISTORY, new Mat());
-        matrixs.put(EnumMatType.BLUR, new Mat());
+//        matrixs = new HashMap<>();
+//        matrixs.put(EnumMatType.AUTO_HISTORY, new Mat());
+//        matrixs.put(EnumMatType.BLUR, new Mat());
     }
 
     @Override
@@ -89,10 +92,8 @@ public class CVViewer extends SimpleViewManager<ImageView> {
                 Imgcodecs imageCodecs = new Imgcodecs();
                 Mat matrix = imageCodecs.imread(uri.getPath(), Imgcodecs.IMREAD_COLOR);
                 this.imageMat = matrix;
-                this.historiesMat.clear();
                 Imgproc.cvtColor(matrix, matrix, Imgproc.COLOR_BGR2RGB);
                 setImageFromMath(matrix);
-                this.matrixs.forEach((key, mat) -> matrixs.put(key, matrix));
             } catch (Exception e) {
                 Log.e(TAG, "err path");
             }
@@ -102,15 +103,31 @@ public class CVViewer extends SimpleViewManager<ImageView> {
         System.out.println(3);
     }
 
+    @ReactProp(name = "nomral", defaultBoolean = false)
+    public void showNomral(ImageView view, boolean value) {
+        Thread task = new Thread(() -> {
+            if (value) this.setImageFromMath(this.imageMat);
+            else this.processImage();
+        });
+        task.start();
+    }
 
+    @ReactProp(name = "light", defaultInt = 0)
+    public void setLight(ImageView view, Integer value) {
+        Thread task = new Thread(() -> {
+            this.light = value;
+            this.processImage();
+        });
+        task.start();
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.N)
     @ReactProp(name = "blur", defaultInt = 0)
     public void setBlur(ImageView view, Integer value) {
         if (imageMat == null) return;
         Thread task = new Thread(() -> {
-            Mat dst = new Mat();
-            Imgproc.GaussianBlur(this.imageMat, dst, new Size(20, 20), value);
-            setImageFromMath(dst);
-
+            this.blur = value;
+            this.processImage();
         });
         task.start();
     }
@@ -119,25 +136,28 @@ public class CVViewer extends SimpleViewManager<ImageView> {
     public void setHitogram(ImageView view, boolean value) {
         System.out.println(value);
         if (imageMat == null) return;
-        try {
-            if (value != true) {
-                this.historiesMat.add(new History(EnumHistory.AUTO_HISTORY, -1));
-                setImageFromMath(this.imageMat);
-                return;
-            };
-            Mat cvtHist = this.imageMat.clone();
-            Imgproc.cvtColor(cvtHist, cvtHist, Imgproc.COLOR_RGB2HSV);
+        Thread task = new Thread(() -> {
+           this.autoHist = value;
+           this.processImage();
+        });
+        task.start();
+    }
+
+    private void processImage() {
+        Mat dst = this.imageMat.clone();
+        System.out.println(this.blur);
+        if (this.blur != 0) Imgproc.GaussianBlur(dst, dst, new Size(15, 15), this.blur);
+        if (this.autoHist) {
+            Imgproc.cvtColor(dst, dst, Imgproc.COLOR_RGB2HSV);
             ArrayList<Mat> chanelsColor = new ArrayList<>(3);
-            Core.split(cvtHist, chanelsColor);
+            Core.split(dst, chanelsColor);
             Imgproc.equalizeHist(chanelsColor.get(2), chanelsColor.get(2));
-            Core.merge(chanelsColor, cvtHist);
-            Imgproc.cvtColor(cvtHist, cvtHist, Imgproc.COLOR_HSV2RGB);
-//            this.historiesMat.add(new History(EnumHistory.AUTO_HISTORY, 1));
-//            this.currentMat = cvtHist;
-            setImageFromMath(cvtHist);
-        }catch (Exception e) {
-            Log.e(TAG, "err autoHistogram");
+            Core.merge(chanelsColor, dst);
+            Imgproc.cvtColor(dst, dst, Imgproc.COLOR_HSV2RGB);
         }
+        System.out.println(this.light);
+        dst.convertTo(dst, -1, 1, this.light);
+        this.setImageFromMath(dst);
     }
 
     private void setImageFromMath(Mat matrix) {

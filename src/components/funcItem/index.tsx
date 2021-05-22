@@ -5,41 +5,46 @@ import { StyleSheet, TouchableOpacity, View } from 'react-native';
 
 interface FuncItemProps {
     name?: string
-    onPress?: (index: number,  propName: string, value?: number) => void
+    onPress?: (index: number, propName: string, value?: number | boolean) => void
     index: number
     propName: string,
     active?: boolean,
     icon: string
     typeIcon?: any
+    type: string
 }
 
 export interface RefFuncItem {
-    setState: (value?: number) => void
+    name: string
+    setState: (value?: number | boolean) => void
 }
 
-const FuncItem= memo(forwardRef<RefFuncItem, FuncItemProps>(({
+const FuncItem = memo(forwardRef<RefFuncItem, FuncItemProps>(({
     name,
     onPress,
     index,
     propName,
     active,
     typeIcon,
-    icon
+    icon,
+    type
 }, ref) => {
 
-    const [state, setState] = useState<number>(0);
+    const [state, setState] = useState<number | boolean>(type === "slider" ? 0 : false);
 
     useImperativeHandle(ref, () => ({
-        setState
+        setState,
+        name
     }))
 
-    console.log(index, state);
-    
-
     return (
-        <TouchableOpacity style={styles.container} onPress={() => onPress && onPress(index, propName, state)}>
+        <TouchableOpacity
+            style={styles.container}
+            onPress={() => onPress && onPress(index, propName, state)}
+            activeOpacity={active ? 1 : 0.8}
+        >
             <Icon style={[active && styles.active]} name={icon} type={typeIcon} />
-            <Text  style={[active && styles.active]}>{name}</Text>
+            <Text style={[active && styles.active, styles.text]}>{name}</Text>
         </TouchableOpacity>
     );
 }))
@@ -56,7 +61,7 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-
+        fontSize: 12
     },
     active: {
         color: COLOR.COLOR_PRIMARY
